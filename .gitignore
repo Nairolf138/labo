@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local outputs and secrets
+.env
+.env.*
+!.env.example
+*.log
+.coverage
+htmlcov/
+dist/
+build/
+artifacts/
+private/
+secrets/
