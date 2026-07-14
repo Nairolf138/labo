@@ -4,6 +4,8 @@ Ce document est un jardin d’idées, pas une feuille de route. Une idée n’en
 
 ## 1. Light Protocol Compiler
 
+**État :** premier incrément validé dans [`experiments/001-light-protocol-compiler`](../experiments/001-light-protocol-compiler/). Prochaine piste : diagnostics de compilation et validation complète des plages.
+
 Décrire des ambiances lumineuses dans un format générique, puis produire des actions compatibles avec les capacités déclarées de lumières **fictives** : couleur HS, température de blanc, luminosité et indisponibilité.
 
 **Premier test :** vérifier qu’aucune commande de couleur n’est envoyée à une lumière limitée au blanc réglable.

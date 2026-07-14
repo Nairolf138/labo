@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+"""Compile a synthetic light scene from JSON files."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+from light_protocol import compile_scene
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--devices", required=True, type=Path)
+    parser.add_argument("--scene", required=True, type=Path)
+    args = parser.parse_args()
+
+    devices = json.loads(args.devices.read_text(encoding="utf-8"))
+    scene = json.loads(args.scene.read_text(encoding="utf-8"))
+    print(json.dumps(compile_scene(scene, devices), indent=2))
+
+
+if __name__ == "__main__":
+    main()

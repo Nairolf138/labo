@@ -1,0 +1,21 @@
+{
+  "targets": {
+    "reading_lamp": {
+      "brightness": 72,
+      "color_temperature": 3100,
+      "hue": 25,
+      "saturation": 90
+    },
+    "stage_wash": {
+      "brightness": 40,
+      "hue": 215,
+      "saturation": 60,
+      "color_temperature": 4500
+    },
+    "offline_lamp": {
+      "brightness": 100,
+      "hue": 0,
+      "saturation": 100
+    }
+  }
+}

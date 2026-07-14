@@ -1,0 +1,12 @@
+{
+  "reading_lamp": {
+    "capabilities": ["brightness", "color_temperature"]
+  },
+  "stage_wash": {
+    "capabilities": ["brightness", "hs_color"]
+  },
+  "offline_lamp": {
+    "capabilities": ["brightness", "hs_color"],
+    "available": false
+  }
+}

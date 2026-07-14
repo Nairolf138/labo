@@ -33,6 +33,7 @@ Le script crée un dossier `experiments/NNN-mon-idee/` à partir du modèle, san
 ## État actuel
 
 - [`000-hello-lab`](experiments/000-hello-lab/) : expérience minimale servant de contrôle de fonctionnement.
-- [`ideas/README.md`](ideas/README.md) : premières pistes de Nox, volontairement non engagées.
+- [`001-light-protocol-compiler`](experiments/001-light-protocol-compiler/) : compilateur local de scènes pour lumières synthétiques.
+- [`ideas/README.md`](ideas/README.md) : jardin des pistes restant à explorer.
 
 Voir [`docs/WORKFLOW.md`](docs/WORKFLOW.md) pour le cycle de travail complet.

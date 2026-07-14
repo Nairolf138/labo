@@ -26,3 +26,5 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Test reference experiment
         run: python -m unittest discover -s experiments/000-hello-lab/tests -v
+      - name: Test light protocol compiler
+        run: python -m unittest discover -s experiments/001-light-protocol-compiler/tests -v
