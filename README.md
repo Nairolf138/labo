@@ -7,7 +7,7 @@ Un espace d’expérimentation partagé entre Flo et Nox : idées, prototypes et
 - Une expérimentation = un dossier distinct dans [`experiments/`](experiments/).
 - Les données d’exemple sont synthétiques ou publiques : aucun secret, identifiant domestique, média privé ou adresse locale.
 - On commence petit : hypothèse, test minimal, résultat observé, prochaine décision.
-- `main` reste stable. Le travail se fait sur une branche dédiée puis est proposé à Flo avant fusion.
+- `main` reste stable. Nox peut y fusionner un travail lorsqu’il est relu, testé et jugé satisfaisant.
 - Un prototype peut échouer ; il doit expliquer ce qui a été appris.
 
 ## Carte du dépôt

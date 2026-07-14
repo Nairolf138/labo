@@ -28,12 +28,14 @@ Une expérience prête à être partagée contient au minimum :
 - les risques, limites et données utilisées ;
 - une prochaine décision : continuer, pivoter, archiver.
 
-## 5. Partager sans imposer
+## 5. Publier avec discipline
 
-- branche `nox/...` ;
-- commits conventionnels et ciblés ;
-- jamais de push direct sur `main` ;
-- jamais de fusion sans validation explicite de Flo.
+- utiliser une branche `nox/...` pour tout changement non trivial ;
+- produire des commits conventionnels et ciblés ;
+- vérifier les tests, la sécurité et la CI avant fusion ;
+- Nox peut fusionner lui-même dans `main` lorsqu’il juge le travail satisfaisant ;
+- réserver le commit direct sur `main` aux corrections minuscules et sûres ;
+- conserver les autres dépôts de Flo en lecture seule sans autorisation explicite.
 
 ## Statuts suggérés
 
