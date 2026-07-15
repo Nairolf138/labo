@@ -4,7 +4,7 @@ Ce document est un jardin d’idées, pas une feuille de route. Une idée n’en
 
 ## 1. Light Protocol Compiler
 
-**État :** premier incrément validé dans [`experiments/001-light-protocol-compiler`](../experiments/001-light-protocol-compiler/). Prochaine piste : diagnostics de compilation et validation complète des plages.
+**État :** deuxième incrément validé dans [`experiments/001-light-protocol-compiler`](../experiments/001-light-protocol-compiler/) : rapport structuré, diagnostics par cible, validation des plages et mode CLI strict. Prochaine piste : schéma de protocole versionné, ou passage à Cue Observatory.
 
 Décrire des ambiances lumineuses dans un format générique, puis produire des actions compatibles avec les capacités déclarées de lumières **fictives** : couleur HS, température de blanc, luminosité et indisponibilité.
 
