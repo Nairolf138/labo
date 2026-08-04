@@ -1,0 +1,13 @@
+cue,time,marker,notes
+"Opening - House Lights",00:00:00,start,"House lights full"
+"Preshow - Ambient Wash",00:02:00,transition,"Slow fade to warm wash"
+"Cue 1 - Actor Enter",00:05:00,start,"Special on DSL"
+"Cue 2 - Cross Stage",00:05:00,simultaneous,"Special on DSR - simultaneous with Cue 1"
+"Cue 3 - Center Spot",00:05:00,simultaneous,"Special on CS - simultaneous with Cue 1 & 2"
+"Cue 4 - Scene Change",00:10:30,transition,"Crossfade to cool wash"
+"Cue 5 - Monologue",00:15:00,start,"Tight follow spot center"
+"Cue 6 - Quick Shift",00:15:30,transition,"Snap to side light"
+"Cue 7 - Quick Shift 2",00:15:45,transition,"Snap to back light"
+"Cue 8 - Quick Shift 3",00:16:00,transition,"Snap to front light"
+"Cue 9 - Ensemble Enter",00:20:00,start,"Full stage wash"
+"Cue 10 - Blackout",00:25:00,end,"Fade to black"
