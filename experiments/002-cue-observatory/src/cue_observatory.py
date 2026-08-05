@@ -31,7 +31,7 @@ def format_timedelta(td: timedelta) -> str:
     return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
 
-def parse_csv(csv_path: str) -> list[dict[str, Any]]:
+def parse_csv(csv_path: str) -> tuple[list[dict[str, Any]], list[str]]:
     """Parse CSV file and return list of cue dictionaries with parsed times."""
     cues = []
     warnings = []
@@ -54,7 +54,19 @@ def parse_csv(csv_path: str) -> list[dict[str, Any]]:
                 cue["time"] = timedelta(0)
             cues.append(cue)
 
-    return cues, warnings
+    # Add time_remaining to each cue (time until next cue)
+    sorted_cues = sorted(cues, key=lambda c: c["time"])
+    for i, cue in enumerate(sorted_cues):
+        if i < len(sorted_cues) - 1:
+            next_time = sorted_cues[i + 1]["time"]
+            remaining = next_time - cue["time"]
+            cue["time_remaining"] = format_timedelta(remaining)
+        else:
+            # Last cue has no remaining time
+            cue["time_remaining"] = "00:00:00"
+
+    # Return sorted cues so time_remaining is preserved
+    return sorted_cues, warnings
 
 
 def analyze_density(cues: list[dict], window_seconds: int = 60) -> list[dict]:
@@ -217,10 +229,11 @@ def generate_markdown_report(
     # Timeline
     lines.append("## Timeline")
     lines.append("")
-    lines.append("| Cue | Time | Marker | Notes |")
-    lines.append("|-----|------|--------|-------|")
+    lines.append("| Cue | Time | Time Remaining | Marker | Notes |")
+    lines.append("|-----|------|----------------|--------|-------|")
     for cue in sorted(cues, key=lambda c: c["time"]):
-        lines.append(f"| {cue['cue']} | {format_timedelta(cue['time'])} | {cue['marker']} | {cue['notes']} |")
+        time_remaining = cue.get("time_remaining", "N/A")
+        lines.append(f"| {cue['cue']} | {format_timedelta(cue['time'])} | {time_remaining} | {cue['marker']} | {cue['notes']} |")
     lines.append("")
 
     # Density Analysis
@@ -306,6 +319,7 @@ def generate_json_report(
                 "time": format_timedelta(c["time"]),
                 "marker": c["marker"],
                 "notes": c["notes"],
+                "time_remaining": c.get("time_remaining", "00:00:00"),
             }
             for c in sorted(cues, key=lambda c: c["time"])
         ],

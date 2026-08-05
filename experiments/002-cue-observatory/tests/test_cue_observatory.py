@@ -137,6 +137,54 @@ Cue 2,00:05:00,end,"End"
         self.assertIn("vigilance_points", data)
         self.assertEqual(data["summary"]["total_cues"], 2)
 
+    def test_includes_time_remaining_in_markdown(self) -> None:
+        """Include time remaining until next cue in markdown timeline."""
+        csv_content = """cue,time,marker,notes
+Cue 1,00:00:00,start,"Start"
+Cue 2,00:05:00,transition,"Middle"
+Cue 3,00:10:00,end,"End"
+"""
+
+        with open(self.csv_path, "w") as f:
+            f.write(csv_content)
+
+        report = cue_observatory.generate_report(self.csv_path)
+
+        # Check that Time Remaining column exists
+        self.assertIn("Time Remaining", report)
+        # Cue 1 has 5 minutes until Cue 2
+        self.assertIn("00:05:00", report)
+        # Cue 2 has 5 minutes until Cue 3
+        self.assertIn("Cue 2", report)
+        # Last cue has no remaining time (or 00:00:00)
+        self.assertIn("Cue 3", report)
+
+    def test_includes_time_remaining_in_json(self) -> None:
+        """Include time remaining until next cue in JSON timeline."""
+        csv_content = """cue,time,marker,notes
+Cue 1,00:00:00,start,"Start"
+Cue 2,00:05:00,transition,"Middle"
+Cue 3,00:10:00,end,"End"
+"""
+
+        with open(self.csv_path, "w") as f:
+            f.write(csv_content)
+
+        report = cue_observatory.generate_report(self.csv_path, format="json")
+
+        data = json.loads(report)
+        self.assertIn("timeline", data)
+        self.assertEqual(len(data["timeline"]), 3)
+        
+        # First cue should have time_remaining
+        self.assertIn("time_remaining", data["timeline"][0])
+        self.assertEqual(data["timeline"][0]["time_remaining"], "00:05:00")
+        # Second cue should have time_remaining
+        self.assertIn("time_remaining", data["timeline"][1])
+        self.assertEqual(data["timeline"][1]["time_remaining"], "00:05:00")
+        # Last cue should have 00:00:00 or empty
+        self.assertIn("time_remaining", data["timeline"][2])
+
 
 if __name__ == "__main__":
     unittest.main()
