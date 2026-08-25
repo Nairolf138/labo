@@ -88,6 +88,18 @@ class HomeTwinTest(unittest.TestCase):
         self.assertEqual(events[0], (0, "sensor", {"motion": True}))
         self.assertEqual(events[-1], (4, "light", {"brightness": 0}))
 
+    def test_add_entity_isolates_initial_state(self) -> None:
+        """External mutations must not alter the twin's stored state."""
+        initial_state = {"brightness": 25}
+        home = home_twin.HomeTwin()
+
+        home.add_entity("light", "light", initial_state)
+        initial_state["brightness"] = 100
+        initial_state["external"] = True
+
+        self.assertEqual(home.get_state()["light"]["brightness"], 25)
+        self.assertNotIn("external", home.get_state()["light"])
+
     def test_entity_unavailability(self) -> None:
         """Handle entity unavailability gracefully."""
         home = home_twin.HomeTwin()
