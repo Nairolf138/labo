@@ -39,7 +39,7 @@ class HomeTwin:
         """Add a new entity to the home twin."""
         if entity_id in self.entities:
             raise ValueError(f"Entity {entity_id} already exists")
-        state = initial_state or {}
+        state = copy.deepcopy(initial_state) if initial_state is not None else {}
         state.setdefault("available", True)
         self.entities[entity_id] = Entity(entity_id=entity_id, entity_type=entity_type, state=state)
 
