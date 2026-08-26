@@ -100,6 +100,18 @@ class HomeTwinTest(unittest.TestCase):
         self.assertEqual(home.get_state()["light"]["brightness"], 25)
         self.assertNotIn("external", home.get_state()["light"])
 
+    def test_exported_scenario_is_isolated(self) -> None:
+        """Exported scenarios must not share mutable event data with the twin."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 0})
+        source_changes = {"brightness": 100, "metadata": {"source": "test"}}
+        home.replay_scenario([(0, "light", source_changes)])
+
+        exported = home.export_scenario("test_scenario")
+        exported["test_scenario"][0][2]["metadata"]["source"] = "external"
+
+        self.assertEqual(home.export_scenario("test_scenario")["test_scenario"][0][2]["metadata"]["source"], "test")
+
     def test_entity_unavailability(self) -> None:
         """Handle entity unavailability gracefully."""
         home = home_twin.HomeTwin()
