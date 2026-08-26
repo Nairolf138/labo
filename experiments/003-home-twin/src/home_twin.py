@@ -18,7 +18,7 @@ class Entity:
     def update_state(self, changes: dict[str, Any]) -> None:
         """Update entity state with new values."""
         if self.state.get("available", True):
-            self.state.update(changes)
+            self.state.update(copy.deepcopy(changes))
 
     def get_state(self) -> dict[str, Any]:
         """Get a copy of the current state."""
