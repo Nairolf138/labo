@@ -62,16 +62,16 @@ class HomeTwin:
             if entity_id in self.entities:
                 self.entities[entity_id].update_state(changes)
             events.append((time_step, entity_id, changes))
-        self._last_replayed_scenario = events.copy()
-        return events
+        self._last_replayed_scenario = copy.deepcopy(events)
+        return copy.deepcopy(events)
 
     def export_scenario(self, name: str) -> dict[str, list[tuple[int, str, dict[str, Any]]]]:
         """Export the last replayed scenario by name."""
-        return {name: self._last_replayed_scenario.copy()}
+        return {name: copy.deepcopy(self._last_replayed_scenario)}
 
     def import_scenario(self, scenario_data: dict[str, list[tuple[int, str, dict[str, Any]]]]) -> None:
         """Import scenarios from exported data."""
-        self.scenarios.update(scenario_data)
+        self.scenarios.update(copy.deepcopy(scenario_data))
 
 
 if __name__ == "__main__":
