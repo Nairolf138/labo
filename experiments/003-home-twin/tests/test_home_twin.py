@@ -100,6 +100,26 @@ class HomeTwinTest(unittest.TestCase):
         self.assertEqual(home.get_state()["light"]["brightness"], 25)
         self.assertNotIn("external", home.get_state()["light"])
 
+    def test_state_updates_isolate_nested_input(self) -> None:
+        """Later mutations of update payloads must not alter the twin or replay history."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 0})
+        changes = {"brightness": 100, "metadata": {"source": "test"}}
+
+        home.set_state("light", changes)
+        changes["brightness"] = 25
+        changes["metadata"]["source"] = "external"
+
+        self.assertEqual(home.get_state()["light"]["brightness"], 100)
+        self.assertEqual(home.get_state()["light"]["metadata"]["source"], "test")
+
+        home.replay_scenario([(0, "light", changes)])
+        changes["metadata"]["source"] = "changed-after-replay"
+        self.assertEqual(
+            home.export_scenario("test_scenario")["test_scenario"][0][2]["metadata"]["source"],
+            "external",
+        )
+
     def test_exported_scenario_is_isolated(self) -> None:
         """Exported scenarios must not share mutable event data with the twin."""
         home = home_twin.HomeTwin()
