@@ -151,6 +151,16 @@ class HomeTwinTest(unittest.TestCase):
         state = home.get_state()
         self.assertEqual(state["unreliable_light"]["brightness"], 0)
 
+    def test_unavailable_entity_can_recover(self) -> None:
+        """Availability updates must be accepted so an entity can recover."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 0})
+
+        home.set_state("light", {"available": False})
+        home.set_state("light", {"available": True, "brightness": 75})
+
+        self.assertEqual(home.get_state()["light"], {"available": True, "brightness": 75})
+
     def test_scenario_persistence(self) -> None:
         """Save and load scenarios for reproducibility."""
         home = home_twin.HomeTwin()
