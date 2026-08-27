@@ -32,6 +32,7 @@ class HomeTwin:
     def __init__(self) -> None:
         self.entities: dict[str, Entity] = {}
         self.scenarios: dict[str, list[tuple[int, str, dict[str, Any]]]] = {}
+        self._initial_states: dict[str, dict[str, Any]] = {}
         self._last_replayed_scenario: list[tuple[int, str, dict[str, Any]]] = []
 
     def add_entity(
@@ -43,6 +44,13 @@ class HomeTwin:
         state = copy.deepcopy(initial_state) if initial_state is not None else {}
         state.setdefault("available", True)
         self.entities[entity_id] = Entity(entity_id=entity_id, entity_type=entity_type, state=state)
+        self._initial_states[entity_id] = copy.deepcopy(state)
+
+    def reset(self) -> None:
+        """Restore all entities and clear the current replay history."""
+        for entity_id, entity in self.entities.items():
+            entity.state = copy.deepcopy(self._initial_states[entity_id])
+        self._last_replayed_scenario = []
 
     def set_state(self, entity_id: str, changes: dict[str, Any]) -> None:
         """Set state for an entity."""

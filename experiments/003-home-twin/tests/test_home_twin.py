@@ -161,6 +161,31 @@ class HomeTwinTest(unittest.TestCase):
 
         self.assertEqual(home.get_state()["light"], {"available": True, "brightness": 75})
 
+    def test_reset_restores_initial_entity_states(self) -> None:
+        """Reset returns every entity to its copied initial state."""
+        home = home_twin.HomeTwin()
+        initial = {"brightness": 20, "metadata": {"room": "living"}}
+        home.add_entity("light", "light", initial)
+        home.set_state("light", {"brightness": 100, "metadata": {"room": "changed"}})
+
+        home.reset()
+        initial["metadata"]["room"] = "external"
+
+        self.assertEqual(
+            home.get_state()["light"],
+            {"available": True, "brightness": 20, "metadata": {"room": "living"}},
+        )
+
+    def test_reset_clears_last_replayed_scenario(self) -> None:
+        """Reset prevents a previous replay from being exported as current history."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 0})
+        home.replay_scenario([(1, "light", {"brightness": 100})])
+
+        home.reset()
+
+        self.assertEqual(home.export_scenario("after_reset"), {"after_reset": []})
+
     def test_scenario_persistence(self) -> None:
         """Save and load scenarios for reproducibility."""
         home = home_twin.HomeTwin()
