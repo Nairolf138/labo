@@ -11,6 +11,7 @@ Home Twin is a lightweight simulator for testing connected home automations with
 - **Deterministic Scenarios**: Replay scripted scenarios for reproducible testing
 - **Scenario Persistence**: Export/import scenarios for sharing and regression testing
 - **Availability Simulation**: Handle entity unavailability gracefully (network issues, power loss, etc.)
+- **Resettable Runs**: Restore all entities to their copied initial state between simulations
 
 ## Installation
 
