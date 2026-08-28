@@ -100,6 +100,10 @@ Export the last replayed scenario by name.
 
 Import scenarios from exported data.
 
+#### `list_saved_scenarios() -> list[str]`
+
+Return imported scenario names sorted alphabetically. The returned list is independent from internal storage.
+
 #### `replay_saved_scenario(name: str) -> list[tuple[int, str, dict[str, Any]]]`
 
 Replay an imported scenario by name. Raises `KeyError` when the name is unknown.

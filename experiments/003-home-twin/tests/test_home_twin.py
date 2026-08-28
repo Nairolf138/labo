@@ -233,6 +233,16 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             home.replay_saved_scenario("missing")
 
+    def test_saved_scenario_names_are_sorted_and_isolated(self) -> None:
+        """Saved scenario names are deterministic and cannot mutate storage."""
+        home = home_twin.HomeTwin()
+        home.import_scenario({"zulu": [], "alpha": [], "middle": []})
+
+        names = home.list_saved_scenarios()
+        names.append("external")
+
+        self.assertEqual(home.list_saved_scenarios(), ["alpha", "middle", "zulu"])
+
 
 if __name__ == "__main__":
     unittest.main()
