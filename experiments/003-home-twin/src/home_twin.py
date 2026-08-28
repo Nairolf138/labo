@@ -82,6 +82,14 @@ class HomeTwin:
         """Import scenarios from exported data."""
         self.scenarios.update(copy.deepcopy(scenario_data))
 
+    def replay_saved_scenario(
+        self, name: str
+    ) -> list[tuple[int, str, dict[str, Any]]]:
+        """Replay an imported scenario by name."""
+        if name not in self.scenarios:
+            raise KeyError(f"Scenario {name!r} not found")
+        return self.replay_scenario(self.scenarios[name])
+
 
 if __name__ == "__main__":
     # Simple demo

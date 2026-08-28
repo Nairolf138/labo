@@ -60,6 +60,8 @@ home2 = HomeTwin()
 home2.add_entity("light", "light", {"brightness": 0, "available": True})
 home2.import_scenario(exported)
 home2.replay_scenario(exported["morning_routine"])
+# Or replay an imported scenario directly by name
+home2.replay_saved_scenario("morning_routine")
 ```
 
 ## API Reference
@@ -97,6 +99,10 @@ Export the last replayed scenario by name.
 #### `import_scenario(scenario_data: dict[str, list[tuple[int, str, dict[str, Any]]]]) -> None`
 
 Import scenarios from exported data.
+
+#### `replay_saved_scenario(name: str) -> list[tuple[int, str, dict[str, Any]]]`
+
+Replay an imported scenario by name. Raises `KeyError` when the name is unknown.
 
 ## Testing
 

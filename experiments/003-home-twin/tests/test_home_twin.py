@@ -215,6 +215,24 @@ class HomeTwinTest(unittest.TestCase):
         state = home2.get_state()
         self.assertEqual(state["light"]["brightness"], 0)
 
+    def test_replay_saved_scenario(self) -> None:
+        """Replay an imported scenario by name without exposing storage details."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 0})
+        home.import_scenario({"evening": [(0, "light", {"brightness": 80})]})
+
+        events = home.replay_saved_scenario("evening")
+
+        self.assertEqual(events, [(0, "light", {"brightness": 80})])
+        self.assertEqual(home.get_state()["light"]["brightness"], 80)
+
+    def test_replay_saved_scenario_requires_known_name(self) -> None:
+        """Missing saved scenarios fail clearly instead of becoming empty replays."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(KeyError):
+            home.replay_saved_scenario("missing")
+
 
 if __name__ == "__main__":
     unittest.main()
