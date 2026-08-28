@@ -82,6 +82,10 @@ class HomeTwin:
         """Import scenarios from exported data."""
         self.scenarios.update(copy.deepcopy(scenario_data))
 
+    def list_saved_scenarios(self) -> list[str]:
+        """Return saved scenario names in deterministic order."""
+        return sorted(self.scenarios)
+
     def replay_saved_scenario(
         self, name: str
     ) -> list[tuple[int, str, dict[str, Any]]]:
