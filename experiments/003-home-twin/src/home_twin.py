@@ -62,6 +62,12 @@ class HomeTwin:
         """Get state of all entities."""
         return {eid: entity.get_state() for eid, entity in self.entities.items()}
 
+    def get_entity_state(self, entity_id: str) -> dict[str, Any]:
+        """Get an isolated copy of one entity's state."""
+        if entity_id not in self.entities:
+            raise KeyError(f"Entity {entity_id!r} not found")
+        return self.entities[entity_id].get_state()
+
     def replay_scenario(
         self, scenario: list[tuple[int, str, dict[str, Any]]]
     ) -> list[tuple[int, str, dict[str, Any]]]:
