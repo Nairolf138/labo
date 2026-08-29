@@ -78,6 +78,12 @@ class HomeTwin:
         """Export the last replayed scenario by name."""
         return {name: copy.deepcopy(self._last_replayed_scenario)}
 
+    def save_scenario(self, name: str) -> dict[str, list[tuple[int, str, dict[str, Any]]]]:
+        """Save and return the last replayed scenario under ``name``."""
+        exported = self.export_scenario(name)
+        self.import_scenario(exported)
+        return exported
+
     def import_scenario(self, scenario_data: dict[str, list[tuple[int, str, dict[str, Any]]]]) -> None:
         """Import scenarios from exported data."""
         self.scenarios.update(copy.deepcopy(scenario_data))

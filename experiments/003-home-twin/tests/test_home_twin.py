@@ -233,6 +233,20 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             home.replay_saved_scenario("missing")
 
+    def test_save_scenario_persists_last_replay(self) -> None:
+        """Save the last replay so it can be listed and replayed by name."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 0})
+        home.replay_scenario([(0, "light", {"brightness": 60})])
+
+        exported = home.save_scenario("evening")
+        exported["evening"][0][2]["brightness"] = 100
+        home.reset()
+
+        self.assertEqual(home.list_saved_scenarios(), ["evening"])
+        self.assertEqual(home.replay_saved_scenario("evening"), [(0, "light", {"brightness": 60})])
+        self.assertEqual(home.get_state()["light"]["brightness"], 60)
+
     def test_saved_scenario_names_are_sorted_and_isolated(self) -> None:
         """Saved scenario names are deterministic and cannot mutate storage."""
         home = home_twin.HomeTwin()

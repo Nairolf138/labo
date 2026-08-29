@@ -62,6 +62,9 @@ home2.import_scenario(exported)
 home2.replay_scenario(exported["morning_routine"])
 # Or replay an imported scenario directly by name
 home2.replay_saved_scenario("morning_routine")
+
+# Or save the current replay directly for later listing/replay
+home.save_scenario("morning_routine")
 ```
 
 ## API Reference
@@ -99,6 +102,10 @@ Export the last replayed scenario by name.
 #### `import_scenario(scenario_data: dict[str, list[tuple[int, str, dict[str, Any]]]]) -> None`
 
 Import scenarios from exported data.
+
+#### `save_scenario(name: str) -> dict[str, list[tuple[int, str, dict[str, Any]]]]`
+
+Save the last replayed scenario under `name` and return an isolated export.
 
 #### `list_saved_scenarios() -> list[str]`
 
