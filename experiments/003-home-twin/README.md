@@ -89,6 +89,10 @@ Update an entity's state. If entity is unavailable, changes are ignored.
 
 Get current state of all entities.
 
+#### `get_entity_state(entity_id: str) -> dict[str, Any]`
+
+Get an isolated copy of one entity's state. Raises `KeyError` when the entity is unknown.
+
 #### `replay_scenario(scenario: list[tuple[int, str, dict[str, Any]]]) -> list[tuple[int, str, dict[str, Any]]]`
 
 Replay a deterministic scenario. Returns list of applied events.

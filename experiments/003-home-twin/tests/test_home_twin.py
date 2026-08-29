@@ -257,6 +257,23 @@ class HomeTwinTest(unittest.TestCase):
 
         self.assertEqual(home.list_saved_scenarios(), ["alpha", "middle", "zulu"])
 
+    def test_get_entity_state_returns_isolated_state(self) -> None:
+        """Callers can inspect one entity without mutating the twin."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 50, "metadata": {"room": "study"}})
+
+        state = home.get_entity_state("light")
+        state["metadata"]["room"] = "external"
+
+        self.assertEqual(home.get_entity_state("light")["metadata"]["room"], "study")
+
+    def test_get_entity_state_requires_known_entity(self) -> None:
+        """Unknown entity lookups fail with a useful error."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(KeyError):
+            home.get_entity_state("missing")
+
 
 if __name__ == "__main__":
     unittest.main()
