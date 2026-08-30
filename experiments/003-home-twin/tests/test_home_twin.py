@@ -274,6 +274,26 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             home.get_entity_state("missing")
 
+    def test_remove_entity_cleans_up_home_state(self) -> None:
+        """Removing an entity makes it disappear and prevents stale reset state."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 20})
+        home.set_state("light", {"brightness": 100})
+
+        home.remove_entity("light")
+        home.reset()
+
+        self.assertNotIn("light", home.get_state())
+        with self.assertRaises(KeyError):
+            home.get_entity_state("light")
+
+    def test_remove_entity_requires_known_entity(self) -> None:
+        """Removing an unknown entity fails clearly."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(ValueError):
+            home.remove_entity("missing")
+
 
 if __name__ == "__main__":
     unittest.main()

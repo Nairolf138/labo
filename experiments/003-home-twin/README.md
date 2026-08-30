@@ -12,6 +12,7 @@ Home Twin is a lightweight simulator for testing connected home automations with
 - **Scenario Persistence**: Export/import scenarios for sharing and regression testing
 - **Availability Simulation**: Handle entity unavailability gracefully (network issues, power loss, etc.)
 - **Resettable Runs**: Restore all entities to their copied initial state between simulations
+- **Dynamic Entities**: Remove entities cleanly when a simulated device leaves the home
 
 ## Installation
 
@@ -84,6 +85,10 @@ Add a new entity to the home twin.
 #### `set_state(entity_id: str, changes: dict[str, Any]) -> None`
 
 Update an entity's state. If entity is unavailable, changes are ignored.
+
+#### `remove_entity(entity_id: str) -> None`
+
+Remove an entity and its initial-state snapshot. Raises `ValueError` when the entity is unknown.
 
 #### `get_state() -> dict[str, dict[str, Any]]`
 
