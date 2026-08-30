@@ -52,6 +52,13 @@ class HomeTwin:
             entity.state = copy.deepcopy(self._initial_states[entity_id])
         self._last_replayed_scenario = []
 
+    def remove_entity(self, entity_id: str) -> None:
+        """Remove an entity and its initial-state snapshot from the twin."""
+        if entity_id not in self.entities:
+            raise ValueError(f"Entity {entity_id} not found")
+        del self.entities[entity_id]
+        del self._initial_states[entity_id]
+
     def set_state(self, entity_id: str, changes: dict[str, Any]) -> None:
         """Set state for an entity."""
         if entity_id not in self.entities:
