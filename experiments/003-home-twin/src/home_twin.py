@@ -105,6 +105,12 @@ class HomeTwin:
         """Return saved scenario names in deterministic order."""
         return sorted(self.scenarios)
 
+    def remove_saved_scenario(self, name: str) -> None:
+        """Remove a saved scenario by name."""
+        if name not in self.scenarios:
+            raise KeyError(f"Scenario {name!r} not found")
+        del self.scenarios[name]
+
     def replay_saved_scenario(
         self, name: str
     ) -> list[tuple[int, str, dict[str, Any]]]:

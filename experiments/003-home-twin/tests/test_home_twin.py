@@ -257,6 +257,24 @@ class HomeTwinTest(unittest.TestCase):
 
         self.assertEqual(home.list_saved_scenarios(), ["alpha", "middle", "zulu"])
 
+    def test_remove_saved_scenario(self) -> None:
+        """A saved scenario can be removed without affecting other scenarios."""
+        home = home_twin.HomeTwin()
+        home.import_scenario({"keep": [], "discard": []})
+
+        home.remove_saved_scenario("discard")
+
+        self.assertEqual(home.list_saved_scenarios(), ["keep"])
+        with self.assertRaises(KeyError):
+            home.replay_saved_scenario("discard")
+
+    def test_remove_saved_scenario_requires_known_name(self) -> None:
+        """Removing an unknown saved scenario fails clearly."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(KeyError):
+            home.remove_saved_scenario("missing")
+
     def test_get_entity_state_returns_isolated_state(self) -> None:
         """Callers can inspect one entity without mutating the twin."""
         home = home_twin.HomeTwin()
