@@ -312,6 +312,20 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             home.remove_entity("missing")
 
+    def test_list_entities_by_type_is_sorted_and_isolated(self) -> None:
+        """Automations can discover entities of one type deterministically."""
+        home = home_twin.HomeTwin()
+        home.add_entity("z_light", "light")
+        home.add_entity("motion", "sensor")
+        home.add_entity("a_light", "light")
+
+        light_ids = home.list_entities(entity_type="light")
+        light_ids.append("external")
+
+        self.assertEqual(light_ids[:2], ["a_light", "z_light"])
+        self.assertEqual(home.list_entities(entity_type="light"), ["a_light", "z_light"])
+        self.assertEqual(home.list_entities(), ["a_light", "motion", "z_light"])
+
 
 if __name__ == "__main__":
     unittest.main()

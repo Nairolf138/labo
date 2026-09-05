@@ -69,6 +69,15 @@ class HomeTwin:
         """Get state of all entities."""
         return {eid: entity.get_state() for eid, entity in self.entities.items()}
 
+    def list_entities(self, entity_type: str | None = None) -> list[str]:
+        """Return entity IDs, optionally filtered by type, in sorted order."""
+        entity_ids = (
+            entity.entity_id
+            for entity in self.entities.values()
+            if entity_type is None or entity.entity_type == entity_type
+        )
+        return sorted(entity_ids)
+
     def get_entity_state(self, entity_id: str) -> dict[str, Any]:
         """Get an isolated copy of one entity's state."""
         if entity_id not in self.entities:
