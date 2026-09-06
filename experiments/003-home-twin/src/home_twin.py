@@ -59,6 +59,18 @@ class HomeTwin:
         del self.entities[entity_id]
         del self._initial_states[entity_id]
 
+    def rename_entity(self, entity_id: str, new_entity_id: str) -> None:
+        """Rename an entity without losing its type, state, or reset snapshot."""
+        if entity_id not in self.entities:
+            raise ValueError(f"Entity {entity_id} not found")
+        if new_entity_id in self.entities:
+            raise ValueError(f"Entity {new_entity_id} already exists")
+
+        entity = self.entities.pop(entity_id)
+        entity.entity_id = new_entity_id
+        self.entities[new_entity_id] = entity
+        self._initial_states[new_entity_id] = self._initial_states.pop(entity_id)
+
     def set_state(self, entity_id: str, changes: dict[str, Any]) -> None:
         """Set state for an entity."""
         if entity_id not in self.entities:
