@@ -275,6 +275,17 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             home.remove_saved_scenario("missing")
 
+    def test_clear_saved_scenarios_removes_all_saved_data(self) -> None:
+        """A reset of scenario storage removes every saved scenario."""
+        home = home_twin.HomeTwin()
+        home.import_scenario({"zulu": [(0, "light", {"brightness": 80})], "alpha": []})
+
+        home.clear_saved_scenarios()
+
+        self.assertEqual(home.list_saved_scenarios(), [])
+        with self.assertRaises(KeyError):
+            home.replay_saved_scenario("zulu")
+
     def test_get_entity_state_returns_isolated_state(self) -> None:
         """Callers can inspect one entity without mutating the twin."""
         home = home_twin.HomeTwin()
