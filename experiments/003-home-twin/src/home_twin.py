@@ -147,6 +147,10 @@ class HomeTwin:
             raise KeyError(f"Scenario {name!r} not found")
         del self.scenarios[name]
 
+    def clear_saved_scenarios(self) -> None:
+        """Remove every saved scenario without changing entity state or replay history."""
+        self.scenarios.clear()
+
     def replay_saved_scenario(
         self, name: str
     ) -> list[tuple[int, str, dict[str, Any]]]:
