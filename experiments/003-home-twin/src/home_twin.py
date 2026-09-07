@@ -70,6 +70,21 @@ class HomeTwin:
         entity.entity_id = new_entity_id
         self.entities[new_entity_id] = entity
         self._initial_states[new_entity_id] = self._initial_states.pop(entity_id)
+        self._last_replayed_scenario = [
+            (time_step, new_entity_id if event_entity_id == entity_id else event_entity_id, changes)
+            for time_step, event_entity_id, changes in self._last_replayed_scenario
+        ]
+        self.scenarios = {
+            name: [
+                (
+                    time_step,
+                    new_entity_id if event_entity_id == entity_id else event_entity_id,
+                    changes,
+                )
+                for time_step, event_entity_id, changes in events
+            ]
+            for name, events in self.scenarios.items()
+        }
 
     def set_state(self, entity_id: str, changes: dict[str, Any]) -> None:
         """Set state for an entity."""

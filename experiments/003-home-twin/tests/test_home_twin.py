@@ -339,6 +339,21 @@ class HomeTwinTest(unittest.TestCase):
             home.rename_entity("first", "second")
         self.assertEqual(home.list_entities(), ["first", "second"])
 
+    def test_rename_entity_updates_saved_and_current_scenario_references(self) -> None:
+        """Renaming keeps replayable scenarios aligned with the entity ID."""
+        home = home_twin.HomeTwin()
+        home.add_entity("old_light", "light", {"brightness": 0})
+        scenario = [(0, "old_light", {"brightness": 80})]
+        home.replay_scenario(scenario)
+        home.save_scenario("evening")
+
+        home.rename_entity("old_light", "new_light")
+
+        self.assertEqual(home.export_scenario("current"), {"current": [(0, "new_light", {"brightness": 80})]})
+        home.reset()
+        self.assertEqual(home.replay_saved_scenario("evening"), [(0, "new_light", {"brightness": 80})])
+        self.assertEqual(home.get_entity_state("new_light")["brightness"], 80)
+
     def test_list_entities_by_type_is_sorted_and_isolated(self) -> None:
         """Automations can discover entities of one type deterministically."""
         home = home_twin.HomeTwin()
