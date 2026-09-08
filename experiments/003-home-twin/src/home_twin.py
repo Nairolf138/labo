@@ -58,6 +58,15 @@ class HomeTwin:
             raise ValueError(f"Entity {entity_id} not found")
         del self.entities[entity_id]
         del self._initial_states[entity_id]
+        self._last_replayed_scenario = [
+            event
+            for event in self._last_replayed_scenario
+            if event[1] != entity_id
+        ]
+        self.scenarios = {
+            name: [event for event in events if event[1] != entity_id]
+            for name, events in self.scenarios.items()
+        }
 
     def rename_entity(self, entity_id: str, new_entity_id: str) -> None:
         """Rename an entity without losing its type, state, or reset snapshot."""
