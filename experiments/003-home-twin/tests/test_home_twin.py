@@ -396,6 +396,17 @@ class HomeTwinTest(unittest.TestCase):
         self.assertEqual(home.list_entities(entity_type="light"), ["a_light", "z_light"])
         self.assertEqual(home.list_entities(), ["a_light", "motion", "z_light"])
 
+    def test_has_entity_reports_current_membership(self) -> None:
+        """Automations can check entity membership without inspecting storage."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+
+        self.assertTrue(home.has_entity("light"))
+        self.assertFalse(home.has_entity("missing"))
+
+        home.remove_entity("light")
+        self.assertFalse(home.has_entity("light"))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -114,6 +114,10 @@ class HomeTwin:
         )
         return sorted(entity_ids)
 
+    def has_entity(self, entity_id: str) -> bool:
+        """Return whether an entity currently exists in the home twin."""
+        return entity_id in self.entities
+
     def get_entity_state(self, entity_id: str) -> dict[str, Any]:
         """Get an isolated copy of one entity's state."""
         if entity_id not in self.entities:
