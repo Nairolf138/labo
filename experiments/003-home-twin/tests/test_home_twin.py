@@ -323,6 +323,23 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             home.remove_entity("missing")
 
+    def test_remove_entity_cleans_saved_and_current_scenario_references(self) -> None:
+        """Removing an entity prevents stale scenarios from replaying its events."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 0})
+        home.add_entity("sensor", "sensor", {"motion": False})
+        home.replay_scenario([
+            (0, "light", {"brightness": 80}),
+            (1, "sensor", {"motion": True}),
+        ])
+        home.save_scenario("evening")
+
+        home.remove_entity("light")
+
+        self.assertEqual(home.export_scenario("current")["current"], [(1, "sensor", {"motion": True})])
+        home.reset()
+        self.assertEqual(home.replay_saved_scenario("evening"), [(1, "sensor", {"motion": True})])
+
     def test_rename_entity_preserves_state_and_type(self) -> None:
         """Renaming an entity keeps its state and reset snapshot under the new ID."""
         home = home_twin.HomeTwin()
