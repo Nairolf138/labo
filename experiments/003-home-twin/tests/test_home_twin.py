@@ -367,6 +367,19 @@ class HomeTwinTest(unittest.TestCase):
             home.rename_entity("first", "second")
         self.assertEqual(home.list_entities(), ["first", "second"])
 
+    def test_rename_entity_to_same_id_is_a_noop(self) -> None:
+        """Renaming an entity to its current ID preserves its state and references."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 20})
+        home.replay_scenario([(0, "light", {"brightness": 80})])
+        home.save_scenario("evening")
+
+        home.rename_entity("light", "light")
+
+        self.assertEqual(home.get_entity_state("light")["brightness"], 80)
+        self.assertEqual(home.export_scenario("current")["current"], [(0, "light", {"brightness": 80})])
+        self.assertEqual(home.replay_saved_scenario("evening"), [(0, "light", {"brightness": 80})])
+
     def test_rename_entity_updates_saved_and_current_scenario_references(self) -> None:
         """Renaming keeps replayable scenarios aligned with the entity ID."""
         home = home_twin.HomeTwin()

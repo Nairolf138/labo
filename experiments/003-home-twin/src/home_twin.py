@@ -72,6 +72,8 @@ class HomeTwin:
         """Rename an entity without losing its type, state, or reset snapshot."""
         if entity_id not in self.entities:
             raise ValueError(f"Entity {entity_id} not found")
+        if entity_id == new_entity_id:
+            return
         if new_entity_id in self.entities:
             raise ValueError(f"Entity {new_entity_id} already exists")
 
