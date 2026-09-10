@@ -120,6 +120,20 @@ class HomeTwinTest(unittest.TestCase):
             "external",
         )
 
+    def test_replay_scenario_isolates_input_events(self) -> None:
+        """Later input mutations must not alter the replay history."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light", {"brightness": 0})
+        changes = {"brightness": 100, "metadata": {"source": "test"}}
+
+        home.replay_scenario([(0, "light", changes)])
+        changes["metadata"]["source"] = "external"
+
+        self.assertEqual(
+            home.export_scenario("test_scenario")["test_scenario"][0][2]["metadata"]["source"],
+            "test",
+        )
+
     def test_exported_scenario_is_isolated(self) -> None:
         """Exported scenarios must not share mutable event data with the twin."""
         home = home_twin.HomeTwin()
