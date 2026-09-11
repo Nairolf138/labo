@@ -126,6 +126,12 @@ class HomeTwin:
             raise KeyError(f"Entity {entity_id!r} not found")
         return self.entities[entity_id].get_state()
 
+    def get_entity_type(self, entity_id: str) -> str:
+        """Get the type of one entity without exposing the entity object."""
+        if entity_id not in self.entities:
+            raise KeyError(f"Entity {entity_id!r} not found")
+        return self.entities[entity_id].entity_type
+
     def replay_scenario(
         self, scenario: list[tuple[int, str, dict[str, Any]]]
     ) -> list[tuple[int, str, dict[str, Any]]]:

@@ -434,6 +434,20 @@ class HomeTwinTest(unittest.TestCase):
         home.remove_entity("light")
         self.assertFalse(home.has_entity("light"))
 
+    def test_get_entity_type_returns_type_without_exposing_storage(self) -> None:
+        """Automations can inspect an entity type through the public API."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+
+        self.assertEqual(home.get_entity_type("light"), "light")
+
+    def test_get_entity_type_requires_known_entity(self) -> None:
+        """Unknown entity type lookups fail clearly."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(KeyError):
+            home.get_entity_type("missing")
+
 
 if __name__ == "__main__":
     unittest.main()

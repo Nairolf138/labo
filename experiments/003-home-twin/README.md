@@ -108,6 +108,10 @@ Return entity IDs sorted alphabetically. When `entity_type` is provided, only ma
 
 Get an isolated copy of one entity's state. Raises `KeyError` when the entity is unknown.
 
+#### `get_entity_type(entity_id: str) -> str`
+
+Get one entity's type without exposing internal entity storage. Raises `KeyError` when the entity is unknown.
+
 #### `replay_scenario(scenario: list[tuple[int, str, dict[str, Any]]]) -> list[tuple[int, str, dict[str, Any]]]`
 
 Replay a deterministic scenario. Returns list of applied events.
