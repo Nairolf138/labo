@@ -448,6 +448,15 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             home.get_entity_type("missing")
 
+    def test_list_entity_types_is_sorted_and_unique(self) -> None:
+        """Automations can discover the available entity categories deterministically."""
+        home = home_twin.HomeTwin()
+        home.add_entity("z_light", "light")
+        home.add_entity("motion", "sensor")
+        home.add_entity("a_light", "light")
+
+        self.assertEqual(home.list_entity_types(), ["light", "sensor"])
+
 
 if __name__ == "__main__":
     unittest.main()

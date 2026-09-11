@@ -116,6 +116,10 @@ class HomeTwin:
         )
         return sorted(entity_ids)
 
+    def list_entity_types(self) -> list[str]:
+        """Return the distinct entity types currently present, in sorted order."""
+        return sorted({entity.entity_type for entity in self.entities.values()})
+
     def has_entity(self, entity_id: str) -> bool:
         """Return whether an entity currently exists in the home twin."""
         return entity_id in self.entities
