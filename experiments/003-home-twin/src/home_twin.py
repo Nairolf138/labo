@@ -120,6 +120,12 @@ class HomeTwin:
         """Return the distinct entity types currently present, in sorted order."""
         return sorted({entity.entity_type for entity in self.entities.values()})
 
+    def count_entities(self, entity_type: str | None = None) -> int:
+        """Return the number of entities, optionally filtered by type."""
+        if entity_type is None:
+            return len(self.entities)
+        return sum(entity.entity_type == entity_type for entity in self.entities.values())
+
     def has_entity(self, entity_id: str) -> bool:
         """Return whether an entity currently exists in the home twin."""
         return entity_id in self.entities

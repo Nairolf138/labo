@@ -14,7 +14,7 @@ Home Twin is a lightweight simulator for testing connected home automations with
 - **Resettable Runs**: Restore all entities to their copied initial state between simulations
 - **Dynamic Entities**: Remove entities cleanly, including their references in saved and current scenarios
 - **Entity Renaming**: Change an entity ID without losing its type, state, or reset behavior
-- **Entity Discovery**: List entity IDs globally or by type in deterministic order
+- **Entity Discovery**: List entity IDs globally or by type in deterministic order, and count current entities
 
 ## Installation
 
@@ -103,6 +103,10 @@ Get current state of all entities.
 #### `list_entities(entity_type: str | None = None) -> list[str]`
 
 Return entity IDs sorted alphabetically. When `entity_type` is provided, only matching entities are returned.
+
+#### `count_entities(entity_type: str | None = None) -> int`
+
+Return the number of entities currently in the twin. When `entity_type` is provided, only matching entities are counted.
 
 #### `get_entity_state(entity_id: str) -> dict[str, Any]`
 

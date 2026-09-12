@@ -457,6 +457,20 @@ class HomeTwinTest(unittest.TestCase):
 
         self.assertEqual(home.list_entity_types(), ["light", "sensor"])
 
+    def test_count_entities_reports_total_or_type_filtered_count(self) -> None:
+        """Automations can size the current entity set without inspecting storage."""
+        home = home_twin.HomeTwin()
+        home.add_entity("z_light", "light")
+        home.add_entity("motion", "sensor")
+        home.add_entity("a_light", "light")
+
+        self.assertEqual(home.count_entities(), 3)
+        self.assertEqual(home.count_entities(entity_type="light"), 2)
+        self.assertEqual(home.count_entities(entity_type="switch"), 0)
+
+        home.remove_entity("motion")
+        self.assertEqual(home.count_entities(), 2)
+
 
 if __name__ == "__main__":
     unittest.main()
