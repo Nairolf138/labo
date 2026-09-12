@@ -138,6 +138,10 @@ Save the last replayed scenario under `name` and return an isolated export.
 
 Return imported scenario names sorted alphabetically. The returned list is independent from internal storage.
 
+#### `get_saved_scenario(name: str) -> list[tuple[int, str, dict[str, Any]]]`
+
+Return an isolated copy of a saved scenario. Raises `KeyError` when the name is unknown.
+
 #### `remove_saved_scenario(name: str) -> None`
 
 Remove a saved scenario by name. Raises `KeyError` when the name is unknown.
