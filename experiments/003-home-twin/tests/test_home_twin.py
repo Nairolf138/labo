@@ -284,6 +284,17 @@ class HomeTwinTest(unittest.TestCase):
             [(0, "light", {"brightness": 80})],
         )
 
+    def test_has_saved_scenario_reports_current_membership(self) -> None:
+        """Callers can check saved scenario membership without handling a lookup error."""
+        home = home_twin.HomeTwin()
+        home.import_scenario({"evening": []})
+
+        self.assertTrue(home.has_saved_scenario("evening"))
+        self.assertFalse(home.has_saved_scenario("missing"))
+
+        home.remove_saved_scenario("evening")
+        self.assertFalse(home.has_saved_scenario("evening"))
+
     def test_get_saved_scenario_requires_known_name(self) -> None:
         """Unknown saved scenario lookups fail clearly."""
         home = home_twin.HomeTwin()
