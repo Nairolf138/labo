@@ -172,6 +172,10 @@ class HomeTwin:
         """Return saved scenario names in deterministic order."""
         return sorted(self.scenarios)
 
+    def has_saved_scenario(self, name: str) -> bool:
+        """Return whether a saved scenario currently exists."""
+        return name in self.scenarios
+
     def get_saved_scenario(self, name: str) -> list[tuple[int, str, dict[str, Any]]]:
         """Return an isolated copy of a saved scenario by name."""
         if name not in self.scenarios:
