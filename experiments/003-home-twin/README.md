@@ -154,6 +154,10 @@ Remove a saved scenario by name. Raises `KeyError` when the name is unknown.
 
 Replay an imported scenario by name. Raises `KeyError` when the name is unknown.
 
+#### `clear_saved_scenarios() -> list[str]`
+
+Remove every saved scenario without changing entity state or replay history. Returns removed scenario names sorted alphabetically.
+
 ## Testing
 
 ```bash

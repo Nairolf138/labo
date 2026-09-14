@@ -325,8 +325,9 @@ class HomeTwinTest(unittest.TestCase):
         home = home_twin.HomeTwin()
         home.import_scenario({"zulu": [(0, "light", {"brightness": 80})], "alpha": []})
 
-        home.clear_saved_scenarios()
+        removed = home.clear_saved_scenarios()
 
+        self.assertEqual(removed, ["alpha", "zulu"])
         self.assertEqual(home.list_saved_scenarios(), [])
         with self.assertRaises(KeyError):
             home.replay_saved_scenario("zulu")
