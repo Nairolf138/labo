@@ -120,6 +120,14 @@ class HomeTwin:
         """Return the distinct entity types currently present, in sorted order."""
         return sorted({entity.entity_type for entity in self.entities.values()})
 
+    def list_available_entities(self) -> list[str]:
+        """Return currently available entity IDs in sorted order."""
+        return sorted(
+            entity.entity_id
+            for entity in self.entities.values()
+            if entity.state.get("available", True)
+        )
+
     def count_entities(self, entity_type: str | None = None) -> int:
         """Return the number of entities, optionally filtered by type."""
         if entity_type is None:
