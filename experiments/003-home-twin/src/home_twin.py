@@ -120,20 +120,22 @@ class HomeTwin:
         """Return the distinct entity types currently present, in sorted order."""
         return sorted({entity.entity_type for entity in self.entities.values()})
 
-    def list_available_entities(self) -> list[str]:
-        """Return currently available entity IDs in sorted order."""
+    def list_available_entities(self, entity_type: str | None = None) -> list[str]:
+        """Return available entity IDs, optionally filtered by type, sorted."""
         return sorted(
             entity.entity_id
             for entity in self.entities.values()
             if entity.state.get("available", True)
+            and (entity_type is None or entity.entity_type == entity_type)
         )
 
-    def list_unavailable_entities(self) -> list[str]:
-        """Return currently unavailable entity IDs in sorted order."""
+    def list_unavailable_entities(self, entity_type: str | None = None) -> list[str]:
+        """Return unavailable entity IDs, optionally filtered by type, sorted."""
         return sorted(
             entity.entity_id
             for entity in self.entities.values()
             if not entity.state.get("available", True)
+            and (entity_type is None or entity.entity_type == entity_type)
         )
 
     def count_entities(self, entity_type: str | None = None) -> int:

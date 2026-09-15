@@ -481,6 +481,16 @@ class HomeTwinTest(unittest.TestCase):
         home.set_state("available_light", {"available": False})
         self.assertEqual(home.list_available_entities(), ["available_sensor"])
 
+    def test_availability_discovery_can_filter_by_entity_type(self) -> None:
+        """Availability discovery can target one entity type."""
+        home = home_twin.HomeTwin()
+        home.add_entity("z_light", "light")
+        home.add_entity("a_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor", {"available": False})
+
+        self.assertEqual(home.list_available_entities(entity_type="light"), ["z_light"])
+        self.assertEqual(home.list_unavailable_entities(entity_type="light"), ["a_light"])
+
     def test_has_entity_reports_current_membership(self) -> None:
         """Automations can check entity membership without inspecting storage."""
         home = home_twin.HomeTwin()
