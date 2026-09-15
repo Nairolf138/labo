@@ -59,6 +59,17 @@ class HomeTwinTest(unittest.TestCase):
         state = home.get_state()
         self.assertEqual(state["living_room_light"]["brightness"], 0)
 
+    def test_list_unavailable_entities(self) -> None:
+        """Return unavailable entities in sorted order, including entities without explicit availability."""
+        home = home_twin.HomeTwin()
+        home.add_entity("z_sensor", "sensor", {"available": False})
+        home.add_entity("a_light", "light")
+        home.add_entity("m_sensor", "sensor", {"available": False})
+
+        self.assertEqual(home.list_unavailable_entities(), ["m_sensor", "z_sensor"])
+        home.set_state("a_light", {"available": False})
+        self.assertEqual(home.list_unavailable_entities(), ["a_light", "m_sensor", "z_sensor"])
+
     def test_replay_deterministic_scenario(self) -> None:
         """Replay a deterministic scenario from a script."""
         home = home_twin.HomeTwin()
