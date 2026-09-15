@@ -109,13 +109,13 @@ Return entity IDs sorted alphabetically. When `entity_type` is provided, only ma
 
 Return the number of entities currently in the twin. When `entity_type` is provided, only matching entities are counted.
 
-#### `list_available_entities() -> list[str]`
+#### `list_available_entities(entity_type: str | None = None) -> list[str]`
 
-Return currently available entity IDs sorted alphabetically. Entities without an explicit availability state are considered available.
+Return currently available entity IDs sorted alphabetically, optionally limited to one entity type. Entities without an explicit availability state are considered available.
 
-#### `list_unavailable_entities() -> list[str]`
+#### `list_unavailable_entities(entity_type: str | None = None) -> list[str]`
 
-Return currently unavailable entity IDs sorted alphabetically. Entities without an explicit availability state are considered available.
+Return currently unavailable entity IDs sorted alphabetically, optionally limited to one entity type. Entities without an explicit availability state are considered available.
 
 #### `get_entity_state(entity_id: str) -> dict[str, Any]`
 
