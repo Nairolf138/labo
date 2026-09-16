@@ -499,6 +499,20 @@ class HomeTwinTest(unittest.TestCase):
         self.assertTrue(home.has_entity("light"))
         self.assertFalse(home.has_entity("missing"))
 
+    def test_count_available_entities_filters_by_type(self) -> None:
+        """Availability counts match discovery results and can target one type."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor")
+
+        self.assertEqual(home.count_available_entities(), 2)
+        self.assertEqual(home.count_available_entities(entity_type="light"), 1)
+
+        home.set_state("sensor", {"available": False})
+        self.assertEqual(home.count_available_entities(), 1)
+        self.assertEqual(home.count_available_entities(entity_type="sensor"), 0)
+
         home.remove_entity("light")
         self.assertFalse(home.has_entity("light"))
 
