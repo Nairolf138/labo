@@ -148,6 +148,10 @@ class HomeTwin:
         """Return the number of available entities, optionally filtered by type."""
         return len(self.list_available_entities(entity_type=entity_type))
 
+    def count_unavailable_entities(self, entity_type: str | None = None) -> int:
+        """Return the number of unavailable entities, optionally filtered by type."""
+        return len(self.list_unavailable_entities(entity_type=entity_type))
+
     def has_entity(self, entity_id: str) -> bool:
         """Return whether an entity currently exists in the home twin."""
         return entity_id in self.entities

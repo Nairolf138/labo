@@ -491,6 +491,17 @@ class HomeTwinTest(unittest.TestCase):
         self.assertEqual(home.list_available_entities(entity_type="light"), ["z_light"])
         self.assertEqual(home.list_unavailable_entities(entity_type="light"), ["a_light"])
 
+    def test_count_unavailable_entities_can_filter_by_entity_type(self) -> None:
+        """Availability metrics can count offline entities globally or by type."""
+        home = home_twin.HomeTwin()
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("offline_sensor", "sensor", {"available": False})
+        home.add_entity("online_sensor", "sensor")
+
+        self.assertEqual(home.count_unavailable_entities(), 2)
+        self.assertEqual(home.count_unavailable_entities(entity_type="light"), 1)
+        self.assertEqual(home.count_unavailable_entities(entity_type="sensor"), 1)
+
     def test_has_entity_reports_current_membership(self) -> None:
         """Automations can check entity membership without inspecting storage."""
         home = home_twin.HomeTwin()
