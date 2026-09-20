@@ -214,6 +214,16 @@ class HomeTwin:
             raise KeyError(f"Scenario {name!r} not found")
         del self.scenarios[name]
 
+    def rename_saved_scenario(self, name: str, new_name: str) -> None:
+        """Rename a saved scenario without overwriting an existing scenario."""
+        if name not in self.scenarios:
+            raise KeyError(f"Scenario {name!r} not found")
+        if name == new_name:
+            return
+        if new_name in self.scenarios:
+            raise KeyError(f"Scenario {new_name!r} already exists")
+        self.scenarios[new_name] = self.scenarios.pop(name)
+
     def clear_saved_scenarios(self) -> list[str]:
         """Remove every saved scenario and return removed names in sorted order."""
         removed = sorted(self.scenarios)
