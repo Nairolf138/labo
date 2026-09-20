@@ -564,6 +564,23 @@ class HomeTwinTest(unittest.TestCase):
         home.remove_entity("motion")
         self.assertEqual(home.count_entities(), 2)
 
+    def test_rename_saved_scenario_preserves_events_and_rejects_collisions(self) -> None:
+        """Saved scenarios can be renamed without exposing or losing their events."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.replay_scenario([(0, "light", {"brightness": 80})])
+        home.save_scenario("evening")
+        home.import_scenario({"morning": []})
+
+        home.rename_saved_scenario("evening", "night")
+
+        self.assertEqual(home.list_saved_scenarios(), ["morning", "night"])
+        self.assertEqual(home.get_saved_scenario("night"), [(0, "light", {"brightness": 80})])
+        with self.assertRaises(KeyError):
+            home.rename_saved_scenario("night", "morning")
+        with self.assertRaises(KeyError):
+            home.rename_saved_scenario("missing", "other")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -167,6 +167,10 @@ Return an isolated copy of a saved scenario. Raises `KeyError` when the name is 
 
 Remove a saved scenario by name. Raises `KeyError` when the name is unknown.
 
+#### `rename_saved_scenario(name: str, new_name: str) -> None`
+
+Rename a saved scenario without overwriting an existing scenario. Raises `KeyError` when the source is unknown or the destination already exists.
+
 #### `replay_saved_scenario(name: str) -> list[tuple[int, str, dict[str, Any]]]`
 
 Replay an imported scenario by name. Raises `KeyError` when the name is unknown.
