@@ -168,6 +168,12 @@ class HomeTwin:
             raise KeyError(f"Entity {entity_id!r} not found")
         return self.entities[entity_id].entity_type
 
+    def set_entity_type(self, entity_id: str, entity_type: str) -> None:
+        """Change an entity's type while preserving its ID and state."""
+        if entity_id not in self.entities:
+            raise KeyError(f"Entity {entity_id!r} not found")
+        self.entities[entity_id].entity_type = entity_type
+
     def replay_scenario(
         self, scenario: list[tuple[int, str, dict[str, Any]]]
     ) -> list[tuple[int, str, dict[str, Any]]]:

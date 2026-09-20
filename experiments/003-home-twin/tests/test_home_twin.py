@@ -581,6 +581,25 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             home.rename_saved_scenario("missing", "other")
 
+    def test_set_entity_type_updates_type_without_losing_state(self) -> None:
+        """An entity can be reclassified while retaining its state and ID."""
+        home = home_twin.HomeTwin()
+        home.add_entity("multi_sensor", "sensor", {"value": 21})
+
+        home.set_entity_type("multi_sensor", "climate")
+
+        self.assertEqual(home.get_entity_type("multi_sensor"), "climate")
+        self.assertEqual(home.get_entity_state("multi_sensor")["value"], 21)
+        self.assertEqual(home.list_entities(entity_type="climate"), ["multi_sensor"])
+        self.assertEqual(home.list_entities(entity_type="sensor"), [])
+
+    def test_set_entity_type_requires_known_entity(self) -> None:
+        """Reclassifying an unknown entity fails clearly."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(KeyError):
+            home.set_entity_type("missing", "sensor")
+
 
 if __name__ == "__main__":
     unittest.main()
