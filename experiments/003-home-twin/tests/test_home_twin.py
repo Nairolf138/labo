@@ -564,6 +564,22 @@ class HomeTwinTest(unittest.TestCase):
         home.remove_entity("motion")
         self.assertEqual(home.count_entities(), 2)
 
+    def test_count_entities_by_type_returns_current_sorted_counts(self) -> None:
+        """Automations can inspect the complete entity-type distribution."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.add_entity("desk_light", "light")
+        home.add_entity("motion", "sensor")
+
+        counts = home.count_entities_by_type()
+
+        self.assertEqual(counts, {"light": 2, "sensor": 1})
+        counts["light"] = 99
+        self.assertEqual(home.count_entities_by_type(), {"light": 2, "sensor": 1})
+
+        home.set_entity_type("motion", "binary_sensor")
+        self.assertEqual(home.count_entities_by_type(), {"binary_sensor": 1, "light": 2})
+
     def test_rename_saved_scenario_preserves_events_and_rejects_collisions(self) -> None:
         """Saved scenarios can be renamed without exposing or losing their events."""
         home = home_twin.HomeTwin()

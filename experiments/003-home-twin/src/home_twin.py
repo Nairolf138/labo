@@ -144,6 +144,13 @@ class HomeTwin:
             return len(self.entities)
         return sum(entity.entity_type == entity_type for entity in self.entities.values())
 
+    def count_entities_by_type(self) -> dict[str, int]:
+        """Return the current entity count for each type, ordered by type."""
+        counts = {entity_type: 0 for entity_type in self.list_entity_types()}
+        for entity in self.entities.values():
+            counts[entity.entity_type] += 1
+        return counts
+
     def count_available_entities(self, entity_type: str | None = None) -> int:
         """Return the number of available entities, optionally filtered by type."""
         return len(self.list_available_entities(entity_type=entity_type))
