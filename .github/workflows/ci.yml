@@ -28,5 +28,7 @@ jobs:
         run: python -m unittest discover -s experiments/000-hello-lab/tests -v
       - name: Test light protocol compiler
         run: python -m unittest discover -s experiments/001-light-protocol-compiler/tests -v
+      - name: Test cue observatory
+        run: python -m unittest discover -s experiments/002-cue-observatory/tests -v
       - name: Test home twin
         run: python -m unittest discover -s experiments/003-home-twin/tests -v
