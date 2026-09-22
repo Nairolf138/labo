@@ -155,6 +155,13 @@ class HomeTwin:
         """Return the number of available entities, optionally filtered by type."""
         return len(self.list_available_entities(entity_type=entity_type))
 
+    def count_available_entities_by_type(self) -> dict[str, int]:
+        """Return available entity counts grouped by type, ordered by type."""
+        return {
+            entity_type: self.count_available_entities(entity_type=entity_type)
+            for entity_type in self.list_entity_types()
+        }
+
     def count_unavailable_entities(self, entity_type: str | None = None) -> int:
         """Return the number of unavailable entities, optionally filtered by type."""
         return len(self.list_unavailable_entities(entity_type=entity_type))

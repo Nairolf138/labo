@@ -17,6 +17,7 @@ Home Twin is a lightweight simulator for testing connected home automations with
 - **Entity Discovery**: List entity IDs globally or by type in deterministic order, and count current entities
 - **Entity Type Metrics**: Get a deterministic, isolated count of entities grouped by type
 - **Availability Discovery**: List currently available or unavailable entity IDs in deterministic order, and count them
+- **Availability Metrics**: Get current available-entity counts grouped by type
 
 ## Installation
 
@@ -117,6 +118,10 @@ Return a new dictionary containing the current number of entities for each entit
 #### `count_available_entities(entity_type: str | None = None) -> int`
 
 Return the number of currently available entities. When `entity_type` is provided, only matching entities are counted.
+
+#### `count_available_entities_by_type() -> dict[str, int]`
+
+Return current available-entity counts grouped by type, ordered by type.
 
 #### `count_unavailable_entities(entity_type: str | None = None) -> int`
 
