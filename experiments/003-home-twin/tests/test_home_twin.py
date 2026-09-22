@@ -527,6 +527,24 @@ class HomeTwinTest(unittest.TestCase):
         home.remove_entity("light")
         self.assertFalse(home.has_entity("light"))
 
+    def test_count_available_entities_by_type_tracks_recovery(self) -> None:
+        """Availability metrics expose the current distribution by entity type."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor", {"available": False})
+
+        self.assertEqual(
+            home.count_available_entities_by_type(),
+            {"light": 1, "sensor": 0},
+        )
+
+        home.set_state("sensor", {"available": True})
+        self.assertEqual(
+            home.count_available_entities_by_type(),
+            {"light": 1, "sensor": 1},
+        )
+
     def test_get_entity_type_returns_type_without_exposing_storage(self) -> None:
         """Automations can inspect an entity type through the public API."""
         home = home_twin.HomeTwin()
