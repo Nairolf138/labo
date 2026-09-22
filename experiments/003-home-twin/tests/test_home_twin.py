@@ -634,6 +634,24 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             home.set_entity_type("missing", "sensor")
 
+    def test_count_unavailable_entities_by_type_tracks_recovery(self) -> None:
+        """Availability metrics expose the offline distribution by entity type."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor", {"available": False})
+
+        self.assertEqual(
+            home.count_unavailable_entities_by_type(),
+            {"light": 1, "sensor": 1},
+        )
+
+        home.set_state("sensor", {"available": True})
+        self.assertEqual(
+            home.count_unavailable_entities_by_type(),
+            {"light": 1, "sensor": 0},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
