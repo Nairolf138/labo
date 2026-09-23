@@ -671,6 +671,18 @@ class HomeTwinTest(unittest.TestCase):
         summary["light"]["total"] = 99
         self.assertEqual(home.availability_summary_by_type()["light"]["total"], 2)
 
+    def test_availability_summary_combines_all_entity_types(self) -> None:
+        """Callers can consume one availability summary for the whole home."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor", {"available": False})
+
+        self.assertEqual(
+            home.availability_summary(),
+            {"total": 3, "available": 1, "unavailable": 2},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
