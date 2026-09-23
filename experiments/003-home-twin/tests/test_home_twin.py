@@ -652,6 +652,25 @@ class HomeTwinTest(unittest.TestCase):
             {"light": 1, "sensor": 0},
         )
 
+    def test_availability_summary_by_type_combines_current_metrics(self) -> None:
+        """Callers can consume total, available, and unavailable counts together."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor", {"available": False})
+
+        summary = home.availability_summary_by_type()
+
+        self.assertEqual(
+            summary,
+            {
+                "light": {"total": 2, "available": 1, "unavailable": 1},
+                "sensor": {"total": 1, "available": 0, "unavailable": 1},
+            },
+        )
+        summary["light"]["total"] = 99
+        self.assertEqual(home.availability_summary_by_type()["light"]["total"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()
