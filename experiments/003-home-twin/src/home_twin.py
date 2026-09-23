@@ -173,6 +173,17 @@ class HomeTwin:
             for entity_type in self.list_entity_types()
         }
 
+    def availability_summary_by_type(self) -> dict[str, dict[str, int]]:
+        """Return total, available, and unavailable counts grouped by type."""
+        return {
+            entity_type: {
+                "total": self.count_entities(entity_type=entity_type),
+                "available": self.count_available_entities(entity_type=entity_type),
+                "unavailable": self.count_unavailable_entities(entity_type=entity_type),
+            }
+            for entity_type in self.list_entity_types()
+        }
+
     def has_entity(self, entity_id: str) -> bool:
         """Return whether an entity currently exists in the home twin."""
         return entity_id in self.entities
