@@ -136,6 +136,10 @@ Return current unavailable-entity counts grouped by type, ordered by type.
 
 Return total, available, and unavailable entity counts grouped by type, ordered by type. The returned nested dictionaries are independent from internal state.
 
+#### `availability_summary() -> dict[str, int]`
+
+Return total, available, and unavailable entity counts for the whole home.
+
 #### `list_available_entities(entity_type: str | None = None) -> list[str]`
 
 Return currently available entity IDs sorted alphabetically, optionally limited to one entity type. Entities without an explicit availability state are considered available.
