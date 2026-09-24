@@ -199,6 +199,14 @@ class HomeTwin:
             return 1.0
         return self.count_available_entities() / total
 
+    def availability_ratio_by_type(self) -> dict[str, float]:
+        """Return the available fraction for each entity type, ordered by type."""
+        return {
+            entity_type: self.count_available_entities(entity_type=entity_type)
+            / self.count_entities(entity_type=entity_type)
+            for entity_type in self.list_entity_types()
+        }
+
     def has_entity(self, entity_id: str) -> bool:
         """Return whether an entity currently exists in the home twin."""
         return entity_id in self.entities
