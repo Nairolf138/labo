@@ -70,6 +70,17 @@ class HomeTwinTest(unittest.TestCase):
         home.set_state("a_light", {"available": False})
         self.assertEqual(home.list_unavailable_entities(), ["a_light", "m_sensor", "z_sensor"])
 
+    def test_availability_ratio_by_type(self) -> None:
+        """Return available fractions grouped by entity type, including empty types."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("offline_sensor", "sensor", {"available": False})
+
+        self.assertEqual(home.availability_ratio_by_type(), {"light": 0.5, "sensor": 0.0})
+        home.set_state("offline_sensor", {"available": True})
+        self.assertEqual(home.availability_ratio_by_type(), {"light": 0.5, "sensor": 1.0})
+
     def test_replay_deterministic_scenario(self) -> None:
         """Replay a deterministic scenario from a script."""
         home = home_twin.HomeTwin()
