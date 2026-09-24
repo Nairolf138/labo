@@ -192,6 +192,13 @@ class HomeTwin:
             "unavailable": self.count_unavailable_entities(),
         }
 
+    def availability_ratio(self) -> float:
+        """Return the fraction of entities that are currently available."""
+        total = self.count_entities()
+        if total == 0:
+            return 1.0
+        return self.count_available_entities() / total
+
     def has_entity(self, entity_id: str) -> bool:
         """Return whether an entity currently exists in the home twin."""
         return entity_id in self.entities

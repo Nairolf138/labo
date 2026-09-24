@@ -652,6 +652,21 @@ class HomeTwinTest(unittest.TestCase):
             {"light": 1, "sensor": 0},
         )
 
+    def test_availability_ratio_reports_current_readiness(self) -> None:
+        """Readiness can be compared as a stable ratio for dashboards and checks."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.add_entity("offline_sensor", "sensor", {"available": False})
+
+        self.assertEqual(home.availability_ratio(), 0.5)
+
+        home.set_state("offline_sensor", {"available": True})
+        self.assertEqual(home.availability_ratio(), 1.0)
+
+    def test_availability_ratio_is_one_for_an_empty_home(self) -> None:
+        """An empty home has no unavailable entities and is fully ready by convention."""
+        self.assertEqual(home_twin.HomeTwin().availability_ratio(), 1.0)
+
     def test_availability_summary_by_type_combines_current_metrics(self) -> None:
         """Callers can consume total, available, and unavailable counts together."""
         home = home_twin.HomeTwin()
