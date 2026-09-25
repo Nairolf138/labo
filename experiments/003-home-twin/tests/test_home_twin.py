@@ -678,6 +678,18 @@ class HomeTwinTest(unittest.TestCase):
         """An empty home has no unavailable entities and is fully ready by convention."""
         self.assertEqual(home_twin.HomeTwin().availability_ratio(), 1.0)
 
+    def test_availability_ratio_can_filter_by_entity_type(self) -> None:
+        """Readiness ratios can target one entity type without inspecting storage."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor")
+
+        self.assertEqual(home.availability_ratio(entity_type="light"), 0.5)
+        self.assertEqual(home.availability_ratio(entity_type="sensor"), 1.0)
+        self.assertEqual(home.availability_ratio(entity_type="switch"), 1.0)
+
+
     def test_availability_summary_by_type_combines_current_metrics(self) -> None:
         """Callers can consume total, available, and unavailable counts together."""
         home = home_twin.HomeTwin()
