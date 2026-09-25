@@ -192,12 +192,12 @@ class HomeTwin:
             "unavailable": self.count_unavailable_entities(),
         }
 
-    def availability_ratio(self) -> float:
-        """Return the fraction of entities that are currently available."""
-        total = self.count_entities()
+    def availability_ratio(self, entity_type: str | None = None) -> float:
+        """Return the available fraction, optionally limited to one entity type."""
+        total = self.count_entities(entity_type=entity_type)
         if total == 0:
             return 1.0
-        return self.count_available_entities() / total
+        return self.count_available_entities(entity_type=entity_type) / total
 
     def availability_ratio_by_type(self) -> dict[str, float]:
         """Return the available fraction for each entity type, ordered by type."""

@@ -143,7 +143,7 @@ Return total, available, and unavailable entity counts for the whole home.
 
 #### `availability_ratio() -> float`
 
-Return the fraction of currently available entities for the whole home. An empty home has a ratio of `1.0`.
+Return the fraction of currently available entities. When `entity_type` is provided, only that type is included. An empty home or empty type has a ratio of `1.0`.
 
 #### `availability_ratio_by_type() -> dict[str, float]`
 
