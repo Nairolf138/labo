@@ -721,6 +721,31 @@ class HomeTwinTest(unittest.TestCase):
             {"total": 3, "available": 1, "unavailable": 2},
         )
 
+    def test_availability_ratio_by_type_can_filter_by_minimum(self) -> None:
+        """Dashboards can keep only entity types meeting a readiness threshold."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor")
+
+        self.assertEqual(
+            home.availability_ratio_by_type(minimum_ratio=0.5),
+            {"light": 0.5, "sensor": 1.0},
+        )
+        self.assertEqual(
+            home.availability_ratio_by_type(minimum_ratio=0.75),
+            {"sensor": 1.0},
+        )
+
+    def test_availability_ratio_by_type_rejects_invalid_minimum(self) -> None:
+        """Readiness thresholds must be normalized fractions."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(ValueError):
+            home.availability_ratio_by_type(minimum_ratio=-0.1)
+        with self.assertRaises(ValueError):
+            home.availability_ratio_by_type(minimum_ratio=1.1)
+
 
 if __name__ == "__main__":
     unittest.main()
