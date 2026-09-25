@@ -199,12 +199,21 @@ class HomeTwin:
             return 1.0
         return self.count_available_entities(entity_type=entity_type) / total
 
-    def availability_ratio_by_type(self) -> dict[str, float]:
-        """Return the available fraction for each entity type, ordered by type."""
-        return {
+    def availability_ratio_by_type(self, minimum_ratio: float | None = None) -> dict[str, float]:
+        """Return per-type availability ratios, optionally filtering by a minimum."""
+        if minimum_ratio is not None and not 0.0 <= minimum_ratio <= 1.0:
+            raise ValueError("minimum_ratio must be between 0.0 and 1.0")
+        ratios = {
             entity_type: self.count_available_entities(entity_type=entity_type)
             / self.count_entities(entity_type=entity_type)
             for entity_type in self.list_entity_types()
+        }
+        if minimum_ratio is None:
+            return ratios
+        return {
+            entity_type: ratio
+            for entity_type, ratio in ratios.items()
+            if ratio >= minimum_ratio
         }
 
     def has_entity(self, entity_id: str) -> bool:
