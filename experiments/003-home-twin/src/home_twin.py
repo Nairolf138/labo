@@ -173,15 +173,26 @@ class HomeTwin:
             for entity_type in self.list_entity_types()
         }
 
-    def availability_summary_by_type(self) -> dict[str, dict[str, int]]:
-        """Return total, available, and unavailable counts grouped by type."""
-        return {
+    def availability_summary_by_type(
+        self, minimum_ratio: float | None = None
+    ) -> dict[str, dict[str, int]]:
+        """Return grouped availability counts, optionally filtered by readiness."""
+        if minimum_ratio is not None and not 0.0 <= minimum_ratio <= 1.0:
+            raise ValueError("minimum_ratio must be between 0.0 and 1.0")
+        summary = {
             entity_type: {
                 "total": self.count_entities(entity_type=entity_type),
                 "available": self.count_available_entities(entity_type=entity_type),
                 "unavailable": self.count_unavailable_entities(entity_type=entity_type),
             }
             for entity_type in self.list_entity_types()
+        }
+        if minimum_ratio is None:
+            return summary
+        return {
+            entity_type: metrics
+            for entity_type, metrics in summary.items()
+            if metrics["available"] / metrics["total"] >= minimum_ratio
         }
 
     def availability_summary(self) -> dict[str, int]:

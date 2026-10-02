@@ -746,6 +746,27 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             home.availability_ratio_by_type(minimum_ratio=1.1)
 
+    def test_availability_summary_by_type_can_filter_by_minimum_ratio(self) -> None:
+        """Dashboards can keep complete metrics only for ready entity types."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor")
+
+        self.assertEqual(
+            home.availability_summary_by_type(minimum_ratio=0.75),
+            {"sensor": {"total": 1, "available": 1, "unavailable": 0}},
+        )
+
+    def test_availability_summary_by_type_rejects_invalid_minimum_ratio(self) -> None:
+        """Summary thresholds must be normalized fractions."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(ValueError):
+            home.availability_summary_by_type(minimum_ratio=-0.1)
+        with self.assertRaises(ValueError):
+            home.availability_summary_by_type(minimum_ratio=1.1)
+
 
 if __name__ == "__main__":
     unittest.main()
