@@ -195,13 +195,18 @@ class HomeTwin:
             if metrics["available"] / metrics["total"] >= minimum_ratio
         }
 
-    def availability_summary(self) -> dict[str, int]:
-        """Return total, available, and unavailable counts for the whole home."""
-        return {
+    def availability_summary(self, minimum_ratio: float | None = None) -> dict[str, int]:
+        """Return whole-home availability counts, optionally requiring readiness."""
+        if minimum_ratio is not None and not 0.0 <= minimum_ratio <= 1.0:
+            raise ValueError("minimum_ratio must be between 0.0 and 1.0")
+        summary = {
             "total": self.count_entities(),
             "available": self.count_available_entities(),
             "unavailable": self.count_unavailable_entities(),
         }
+        if minimum_ratio is not None and self.availability_ratio() < minimum_ratio:
+            return {}
+        return summary
 
     def availability_ratio(self, entity_type: str | None = None) -> float:
         """Return the available fraction, optionally limited to one entity type."""

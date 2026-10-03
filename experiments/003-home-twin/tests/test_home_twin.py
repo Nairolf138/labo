@@ -721,6 +721,27 @@ class HomeTwinTest(unittest.TestCase):
             {"total": 3, "available": 1, "unavailable": 2},
         )
 
+    def test_availability_summary_can_filter_by_minimum_ratio(self) -> None:
+        """Whole-home readiness summaries can be omitted below a threshold."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+
+        self.assertEqual(
+            home.availability_summary(minimum_ratio=0.5),
+            {"total": 2, "available": 1, "unavailable": 1},
+        )
+        self.assertEqual(home.availability_summary(minimum_ratio=0.75), {})
+
+    def test_availability_summary_rejects_invalid_minimum_ratio(self) -> None:
+        """Whole-home summary thresholds must be normalized fractions."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(ValueError):
+            home.availability_summary(minimum_ratio=-0.1)
+        with self.assertRaises(ValueError):
+            home.availability_summary(minimum_ratio=1.1)
+
     def test_availability_ratio_by_type_can_filter_by_minimum(self) -> None:
         """Dashboards can keep only entity types meeting a readiness threshold."""
         home = home_twin.HomeTwin()
