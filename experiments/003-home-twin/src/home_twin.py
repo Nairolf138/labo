@@ -232,6 +232,13 @@ class HomeTwin:
             if ratio >= minimum_ratio
         }
 
+    def unavailability_ratio(self, entity_type: str | None = None) -> float:
+        """Return the unavailable fraction, optionally limited to one entity type."""
+        total = self.count_entities(entity_type=entity_type)
+        if total == 0:
+            return 0.0
+        return self.count_unavailable_entities(entity_type=entity_type) / total
+
     def has_entity(self, entity_id: str) -> bool:
         """Return whether an entity currently exists in the home twin."""
         return entity_id in self.entities

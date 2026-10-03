@@ -689,6 +689,17 @@ class HomeTwinTest(unittest.TestCase):
         self.assertEqual(home.availability_ratio(entity_type="sensor"), 1.0)
         self.assertEqual(home.availability_ratio(entity_type="switch"), 1.0)
 
+    def test_unavailability_ratio_is_the_complement_of_availability(self) -> None:
+        """Unavailability is exposed as a stable ratio for dashboards and alerts."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor")
+
+        self.assertEqual(home.unavailability_ratio(), 1 / 3)
+        self.assertEqual(home.unavailability_ratio(entity_type="light"), 0.5)
+        self.assertEqual(home.unavailability_ratio(entity_type="switch"), 0.0)
+
 
     def test_availability_summary_by_type_combines_current_metrics(self) -> None:
         """Callers can consume total, available, and unavailable counts together."""
