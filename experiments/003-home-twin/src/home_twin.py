@@ -239,6 +239,24 @@ class HomeTwin:
             return 0.0
         return self.count_unavailable_entities(entity_type=entity_type) / total
 
+    def unavailability_ratio_by_type(
+        self, maximum_ratio: float | None = None
+    ) -> dict[str, float]:
+        """Return per-type outage ratios, optionally filtering by a maximum."""
+        if maximum_ratio is not None and not 0.0 <= maximum_ratio <= 1.0:
+            raise ValueError("maximum_ratio must be between 0.0 and 1.0")
+        ratios = {
+            entity_type: self.unavailability_ratio(entity_type=entity_type)
+            for entity_type in self.list_entity_types()
+        }
+        if maximum_ratio is None:
+            return ratios
+        return {
+            entity_type: ratio
+            for entity_type, ratio in ratios.items()
+            if ratio <= maximum_ratio
+        }
+
     def has_entity(self, entity_id: str) -> bool:
         """Return whether an entity currently exists in the home twin."""
         return entity_id in self.entities

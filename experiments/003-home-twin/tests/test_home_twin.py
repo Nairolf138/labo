@@ -800,5 +800,31 @@ class HomeTwinTest(unittest.TestCase):
             home.availability_summary_by_type(minimum_ratio=1.1)
 
 
+    def test_unavailability_ratio_by_type_can_filter_by_maximum(self) -> None:
+        """Dashboards can keep entity types below a maximum outage ratio."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor")
+
+        self.assertEqual(
+            home.unavailability_ratio_by_type(maximum_ratio=0.5),
+            {"light": 0.5, "sensor": 0.0},
+        )
+        self.assertEqual(
+            home.unavailability_ratio_by_type(maximum_ratio=0.25),
+            {"sensor": 0.0},
+        )
+
+    def test_unavailability_ratio_by_type_rejects_invalid_maximum(self) -> None:
+        """Outage thresholds must be normalized fractions."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(ValueError):
+            home.unavailability_ratio_by_type(maximum_ratio=-0.1)
+        with self.assertRaises(ValueError):
+            home.unavailability_ratio_by_type(maximum_ratio=1.1)
+
+
 if __name__ == "__main__":
     unittest.main()
