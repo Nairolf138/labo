@@ -208,6 +208,19 @@ class HomeTwin:
             return {}
         return summary
 
+    def unavailability_summary(self, maximum_ratio: float | None = None) -> dict[str, int]:
+        """Return whole-home outage counts, optionally requiring a maximum outage ratio."""
+        if maximum_ratio is not None and not 0.0 <= maximum_ratio <= 1.0:
+            raise ValueError("maximum_ratio must be between 0.0 and 1.0")
+        summary = {
+            "total": self.count_entities(),
+            "available": self.count_available_entities(),
+            "unavailable": self.count_unavailable_entities(),
+        }
+        if maximum_ratio is not None and self.unavailability_ratio() > maximum_ratio:
+            return {}
+        return summary
+
     def availability_ratio(self, entity_type: str | None = None) -> float:
         """Return the available fraction, optionally limited to one entity type."""
         total = self.count_entities(entity_type=entity_type)
