@@ -20,6 +20,7 @@ Home Twin is a lightweight simulator for testing connected home automations with
 - **Availability Metrics**: Get current available-entity counts grouped by type
 - **Availability Summaries**: Get total, available, and unavailable counts grouped by type, optionally filtered by a minimum readiness ratio
 - **Availability Ratios**: Get the available fraction for the whole home or grouped by type
+- **Unavailability Summaries**: Get whole-home outage counts, optionally filtered by a maximum outage ratio
 
 ## Installation
 
@@ -140,6 +141,10 @@ Return total, available, and unavailable entity counts grouped by type, ordered 
 #### `availability_summary() -> dict[str, int]`
 
 Return total, available, and unavailable entity counts for the whole home.
+
+#### `unavailability_summary(maximum_ratio: float | None = None) -> dict[str, int]`
+
+Return total, available, and unavailable entity counts for the whole home. When `maximum_ratio` is provided, return an empty dictionary when the unavailable fraction exceeds the threshold. The threshold must be between `0.0` and `1.0`.
 
 #### `availability_ratio() -> float`
 

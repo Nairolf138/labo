@@ -825,6 +825,27 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             home.unavailability_ratio_by_type(maximum_ratio=1.1)
 
+    def test_unavailability_summary_can_filter_by_maximum_ratio(self) -> None:
+        """Whole-home outage summaries can be omitted above a threshold."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+
+        self.assertEqual(
+            home.unavailability_summary(maximum_ratio=0.5),
+            {"total": 2, "available": 1, "unavailable": 1},
+        )
+        self.assertEqual(home.unavailability_summary(maximum_ratio=0.25), {})
+
+    def test_unavailability_summary_rejects_invalid_maximum_ratio(self) -> None:
+        """Whole-home outage thresholds must be normalized fractions."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(ValueError):
+            home.unavailability_summary(maximum_ratio=-0.1)
+        with self.assertRaises(ValueError):
+            home.unavailability_summary(maximum_ratio=1.1)
+
 
 if __name__ == "__main__":
     unittest.main()
