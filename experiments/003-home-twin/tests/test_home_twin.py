@@ -744,6 +744,19 @@ class HomeTwinTest(unittest.TestCase):
         )
         self.assertEqual(home.availability_summary(minimum_ratio=0.75), {})
 
+    def test_availability_summary_can_filter_by_entity_type(self) -> None:
+        """Whole-home metrics can target one entity type."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor")
+
+        self.assertEqual(
+            home.availability_summary(entity_type="light"),
+            {"total": 2, "available": 1, "unavailable": 1},
+        )
+        self.assertEqual(home.availability_summary(entity_type="switch"), {})
+
     def test_availability_summary_rejects_invalid_minimum_ratio(self) -> None:
         """Whole-home summary thresholds must be normalized fractions."""
         home = home_twin.HomeTwin()
@@ -836,6 +849,19 @@ class HomeTwinTest(unittest.TestCase):
             {"total": 2, "available": 1, "unavailable": 1},
         )
         self.assertEqual(home.unavailability_summary(maximum_ratio=0.25), {})
+
+    def test_unavailability_summary_can_filter_by_entity_type(self) -> None:
+        """Whole-home outage metrics can target one entity type."""
+        home = home_twin.HomeTwin()
+        home.add_entity("available_light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor")
+
+        self.assertEqual(
+            home.unavailability_summary(entity_type="light"),
+            {"total": 2, "available": 1, "unavailable": 1},
+        )
+        self.assertEqual(home.unavailability_summary(entity_type="switch"), {})
 
     def test_unavailability_summary_rejects_invalid_maximum_ratio(self) -> None:
         """Whole-home outage thresholds must be normalized fractions."""

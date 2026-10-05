@@ -195,16 +195,23 @@ class HomeTwin:
             if metrics["available"] / metrics["total"] >= minimum_ratio
         }
 
-    def availability_summary(self, minimum_ratio: float | None = None) -> dict[str, int]:
-        """Return whole-home availability counts, optionally requiring readiness."""
+    def availability_summary(
+        self,
+        minimum_ratio: float | None = None,
+        *,
+        entity_type: str | None = None,
+    ) -> dict[str, int]:
+        """Return availability counts, optionally scoped and requiring readiness."""
         if minimum_ratio is not None and not 0.0 <= minimum_ratio <= 1.0:
             raise ValueError("minimum_ratio must be between 0.0 and 1.0")
         summary = {
-            "total": self.count_entities(),
-            "available": self.count_available_entities(),
-            "unavailable": self.count_unavailable_entities(),
+            "total": self.count_entities(entity_type=entity_type),
+            "available": self.count_available_entities(entity_type=entity_type),
+            "unavailable": self.count_unavailable_entities(entity_type=entity_type),
         }
-        if minimum_ratio is not None and self.availability_ratio() < minimum_ratio:
+        if minimum_ratio is not None and self.availability_ratio(entity_type=entity_type) < minimum_ratio:
+            return {}
+        if summary["total"] == 0 and entity_type is not None:
             return {}
         return summary
 
@@ -230,16 +237,23 @@ class HomeTwin:
             if metrics["unavailable"] / metrics["total"] <= maximum_ratio
         }
 
-    def unavailability_summary(self, maximum_ratio: float | None = None) -> dict[str, int]:
-        """Return whole-home outage counts, optionally requiring a maximum outage ratio."""
+    def unavailability_summary(
+        self,
+        maximum_ratio: float | None = None,
+        *,
+        entity_type: str | None = None,
+    ) -> dict[str, int]:
+        """Return outage counts, optionally scoped and requiring a maximum ratio."""
         if maximum_ratio is not None and not 0.0 <= maximum_ratio <= 1.0:
             raise ValueError("maximum_ratio must be between 0.0 and 1.0")
         summary = {
-            "total": self.count_entities(),
-            "available": self.count_available_entities(),
-            "unavailable": self.count_unavailable_entities(),
+            "total": self.count_entities(entity_type=entity_type),
+            "available": self.count_available_entities(entity_type=entity_type),
+            "unavailable": self.count_unavailable_entities(entity_type=entity_type),
         }
-        if maximum_ratio is not None and self.unavailability_ratio() > maximum_ratio:
+        if maximum_ratio is not None and self.unavailability_ratio(entity_type=entity_type) > maximum_ratio:
+            return {}
+        if summary["total"] == 0 and entity_type is not None:
             return {}
         return summary
 
