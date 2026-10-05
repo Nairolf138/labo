@@ -846,6 +846,42 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             home.unavailability_summary(maximum_ratio=1.1)
 
+    def test_unavailability_summary_by_type_combines_current_metrics(self) -> None:
+        """Callers can consume outage counts grouped by entity type."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor", {"available": False})
+
+        self.assertEqual(
+            home.unavailability_summary_by_type(),
+            {
+                "light": {"total": 2, "available": 1, "unavailable": 1},
+                "sensor": {"total": 1, "available": 0, "unavailable": 1},
+            },
+        )
+
+    def test_unavailability_summary_by_type_can_filter_by_maximum_ratio(self) -> None:
+        """Dashboards can keep complete metrics only for types below an outage limit."""
+        home = home_twin.HomeTwin()
+        home.add_entity("light", "light")
+        home.add_entity("offline_light", "light", {"available": False})
+        home.add_entity("sensor", "sensor", {"available": False})
+
+        self.assertEqual(
+            home.unavailability_summary_by_type(maximum_ratio=0.5),
+            {"light": {"total": 2, "available": 1, "unavailable": 1}},
+        )
+
+    def test_unavailability_summary_by_type_rejects_invalid_maximum_ratio(self) -> None:
+        """Summary thresholds must be normalized fractions."""
+        home = home_twin.HomeTwin()
+
+        with self.assertRaises(ValueError):
+            home.unavailability_summary_by_type(maximum_ratio=-0.1)
+        with self.assertRaises(ValueError):
+            home.unavailability_summary_by_type(maximum_ratio=1.1)
+
 
 if __name__ == "__main__":
     unittest.main()
