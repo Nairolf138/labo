@@ -138,13 +138,13 @@ Return current unavailable-entity counts grouped by type, ordered by type.
 
 Return total, available, and unavailable entity counts grouped by type, ordered by type. When `minimum_ratio` is provided, only types meeting or exceeding that available fraction are returned. The threshold must be between `0.0` and `1.0`. The returned nested dictionaries are independent from internal state.
 
-#### `availability_summary() -> dict[str, int]`
+#### `availability_summary(minimum_ratio: float | None = None, *, entity_type: str | None = None) -> dict[str, int]`
 
-Return total, available, and unavailable entity counts for the whole home.
+Return total, available, and unavailable entity counts. When `entity_type` is provided, scope the counts to that type; an unknown type returns an empty dictionary. When `minimum_ratio` is provided, return an empty dictionary below that available fraction.
 
-#### `unavailability_summary(maximum_ratio: float | None = None) -> dict[str, int]`
+#### `unavailability_summary(maximum_ratio: float | None = None, *, entity_type: str | None = None) -> dict[str, int]`
 
-Return total, available, and unavailable entity counts for the whole home. When `maximum_ratio` is provided, return an empty dictionary when the unavailable fraction exceeds the threshold. The threshold must be between `0.0` and `1.0`.
+Return total, available, and unavailable entity counts. When `entity_type` is provided, scope the counts to that type; an unknown type returns an empty dictionary. When `maximum_ratio` is provided, return an empty dictionary when the unavailable fraction exceeds the threshold. The threshold must be between `0.0` and `1.0`.
 
 #### `availability_ratio() -> float`
 
