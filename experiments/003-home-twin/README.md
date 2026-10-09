@@ -15,6 +15,7 @@ Home Twin is a lightweight simulator for testing connected home automations with
 - **Dynamic Entities**: Remove entities cleanly, including their references in saved and current scenarios
 - **Entity Renaming**: Change an entity ID without losing its type, state, or reset behavior
 - **Entity Discovery**: List entity IDs globally or by type in deterministic order, and count current entities
+- **Entity Type Mutation**: Change an entity type while preserving its state and identity
 - **Entity Type Metrics**: Get a deterministic, isolated count of entities grouped by type
 - **Availability Discovery**: List currently available or unavailable entity IDs in deterministic order, and count them
 - **Availability Metrics**: Get current available-entity counts grouped by type
@@ -102,6 +103,10 @@ Remove an entity and its initial-state snapshot. Raises `ValueError` when the en
 #### `rename_entity(entity_id: str, new_entity_id: str) -> None`
 
 Rename an entity while preserving its type, current state, and initial-state snapshot. Raises `ValueError` when the source is unknown or the destination already exists.
+
+#### `set_entity_type(entity_id: str, entity_type: str) -> None`
+
+Change an entity's type while preserving its ID and state. Raises `KeyError` when the entity is unknown. Type-based discovery and metrics reflect the new type immediately.
 
 #### `get_state() -> dict[str, dict[str, Any]]`
 

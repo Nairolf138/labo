@@ -908,6 +908,20 @@ class HomeTwinTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             home.unavailability_summary_by_type(maximum_ratio=1.1)
 
+    def test_set_entity_type_updates_type_metrics_without_changing_state(self) -> None:
+        """Changing an entity type moves its metrics while preserving its state."""
+        home = home_twin.HomeTwin()
+        home.add_entity("device", "sensor", {"value": 12})
+
+        home.set_entity_type("device", "light")
+
+        self.assertEqual(home.get_entity_type("device"), "light")
+        self.assertEqual(home.get_entity_state("device"), {"available": True, "value": 12})
+        self.assertEqual(home.count_entities_by_type(), {"light": 1})
+        self.assertEqual(home.availability_summary_by_type(), {
+            "light": {"total": 1, "available": 1, "unavailable": 0}
+        })
+
 
 if __name__ == "__main__":
     unittest.main()
