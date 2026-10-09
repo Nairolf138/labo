@@ -21,6 +21,7 @@ Home Twin is a lightweight simulator for testing connected home automations with
 - **Availability Summaries**: Get total, available, and unavailable counts grouped by type, optionally filtered by a minimum readiness ratio
 - **Availability Ratios**: Get the available fraction for the whole home or grouped by type
 - **Unavailability Summaries**: Get whole-home outage counts, optionally filtered by a maximum outage ratio
+- **Unavailability Ratios**: Get the unavailable fraction for the whole home or grouped by type
 
 ## Installation
 
@@ -146,13 +147,25 @@ Return total, available, and unavailable entity counts. When `entity_type` is pr
 
 Return total, available, and unavailable entity counts. When `entity_type` is provided, scope the counts to that type; an unknown type returns an empty dictionary. When `maximum_ratio` is provided, return an empty dictionary when the unavailable fraction exceeds the threshold. The threshold must be between `0.0` and `1.0`.
 
-#### `availability_ratio() -> float`
+#### `unavailability_summary_by_type(maximum_ratio: float | None = None) -> dict[str, dict[str, int]]`
+
+Return total, available, and unavailable entity counts grouped by type, ordered by type. When `maximum_ratio` is provided, only types at or below that unavailable fraction are returned. The threshold must be between `0.0` and `1.0`.
+
+#### `availability_ratio(entity_type: str | None = None) -> float`
 
 Return the fraction of currently available entities. When `entity_type` is provided, only that type is included. An empty home or empty type has a ratio of `1.0`.
 
 #### `availability_ratio_by_type(minimum_ratio: float | None = None) -> dict[str, float]`
 
 Return the fraction of currently available entities grouped by entity type, ordered by type. When `minimum_ratio` is provided, only types meeting or exceeding that fraction are returned. The threshold must be between `0.0` and `1.0`.
+
+#### `unavailability_ratio(entity_type: str | None = None) -> float`
+
+Return the fraction of currently unavailable entities. When `entity_type` is provided, only that type is included. An empty home or empty type has a ratio of `0.0`.
+
+#### `unavailability_ratio_by_type(maximum_ratio: float | None = None) -> dict[str, float]`
+
+Return the fraction of currently unavailable entities grouped by entity type, ordered by type. When `maximum_ratio` is provided, only types at or below that fraction are returned. The threshold must be between `0.0` and `1.0`.
 
 #### `list_available_entities(entity_type: str | None = None) -> list[str]`
 
